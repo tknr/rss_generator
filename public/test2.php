@@ -8,12 +8,13 @@ use Bhaktaraz\RSSGenerator\Item;
 use Bhaktaraz\RSSGenerator\Feed;
 use Bhaktaraz\RSSGenerator\Channel;
 
+// FIXME 2021年 PHP 8 でスクレイピングするなら php-html-parser - 猫でもわかるWebプログラミングと副業 https://www.utakata.work/entry/php/webscraping-with-php-html-parser
 
 header('Content-Type: text/xml');
 
 $client = new Client();
 
-$url = 'https://www.comicbunch.com/manga/bunch/kodomowo/';
+$url = 'https://13dl.me/home/';
 $response = $client->request('GET', $url);
 
 $httpStatusCode = $response->getStatusCode();
@@ -23,9 +24,9 @@ if ($httpStatusCode !== 200) {
   exit(1);
 }
 
-//var_dump($response->getBody()->getContents());
-
 $htmlSource = $response->getBody()->getContents();
+
+
 $crawler = new Crawler($htmlSource);
 
 $feed = new Feed();
@@ -36,7 +37,7 @@ $channel
   ->title($crawler->filter('meta[property="og:title"]')->attr('content'))
   ->description($crawler->filter('meta[property="og:description"]')->attr('content'))
   ->url($url)
-  ->copyright($crawler->filter('footer.push > div.inner > p')->text())
+  ->copyright($crawler->filter('div.copyrights > span.footer-logo')->text())
   ->updateFrequency(1)
   ->updatePeriod('hourly')
   ->ttl(60)
@@ -44,13 +45,12 @@ $channel
 
 
 
-$list = $crawler->filter('div.read > div.inner > div.backnumber > ul.cf > li');
+$list = $crawler->filter('div.recommendationList > div.__item');
 foreach($list as $obj){
 
   print_r(['obj',$obj]);
-  print_r(['obj->childNodes',$obj->childNodes]);
-  print_r(['obj->firstChild',$obj->firstChild]);
-  print_r(['obj->attributes',$obj->attributes]);
+
+  /*
 
   $item  = new Item();
   $item
@@ -60,7 +60,8 @@ foreach($list as $obj){
 //  ->pubDate(strtotime('Fri, 20 Nov 2020 03:08:42 +0100'))
 //  ->content('<article><title>My first post</title><div id="content">Hello! I like sweets like Cupcake, Donut, Eclair, Froyo, Gingerbread, and so on...</div></atricle>')
   ->appendTo($channel);
+  */
 }
 
 
-echo $feed->render();
+//echo $feed->render();

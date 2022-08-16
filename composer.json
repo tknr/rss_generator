@@ -1,8 +1,17 @@
 {
+    "name": "tknr/rss_generator",
+    "autoload": {
+        "psr-4": {
+            "Tknr\\RssGenerator\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "tknr"
+        }
+    ],
     "require": {
-        "guzzlehttp/guzzle": "^7.4",
-        "symfony/dom-crawler": "^5.4",
-        "symfony/css-selector": "^5.4",
-        "bhaktaraz/php-rss-generator": "dev-master"
+        "bhaktaraz/php-rss-generator": "dev-master",
+        "paquettg/php-html-parser": "^3.1"
     }
 }

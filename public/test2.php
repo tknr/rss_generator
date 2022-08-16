@@ -2,8 +2,9 @@
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-use GuzzleHttp\Client;
-use Symfony\Component\DomCrawler\Crawler;
+use PHPHtmlParser\Dom;
+use PHPHtmlParser\Options;
+
 use Bhaktaraz\RSSGenerator\Item;
 use Bhaktaraz\RSSGenerator\Feed;
 use Bhaktaraz\RSSGenerator\Channel;
@@ -12,56 +13,68 @@ use Bhaktaraz\RSSGenerator\Channel;
 
 header('Content-Type: text/xml');
 
-$client = new Client();
+$options = new Options();
+$options->setEnforceEncoding('utf8');
 
 $url = 'https://13dl.me/home/';
-$response = $client->request('GET', $url);
+$dom = new Dom();
+$dom->loadFromUrl($url, $options);
+/*
+$html = $dom->outerHtml;
+echo $html;
+exit();
+*/
+/*
+$element = $dom->find('div.copyrights > span.footer-logo')->innerHtml;
+echo $element;
+exit();
+*/
 
-$httpStatusCode = $response->getStatusCode();
 
-if ($httpStatusCode !== 200) {
-  echo "ステータスコードが正常ではありませんでした。\n";
-  exit(1);
-}
-
-$htmlSource = $response->getBody()->getContents();
-
-
-$crawler = new Crawler($htmlSource);
 
 $feed = new Feed();
+
 $channel = new Channel();
-
-
 $channel
-  ->title($crawler->filter('meta[property="og:title"]')->attr('content'))
-  ->description($crawler->filter('meta[property="og:description"]')->attr('content'))
+  ->title($dom->find('meta[property="og:title"]')->getAttribute('content'))
+  ->description($dom->find('meta[property="og:description"]')->getAttribute('content'))
   ->url($url)
-  ->copyright($crawler->filter('div.copyrights > span.footer-logo')->text())
+  ->copyright($dom->find('div.copyrights > span.footer-logo')->innerHtml)
   ->updateFrequency(1)
   ->updatePeriod('hourly')
   ->ttl(60)
   ->appendTo($feed);
 
+/*
+  echo $feed->render();
+  exit();
+  */
 
-
-$list = $crawler->filter('div.recommendationList > div.__item');
-foreach($list as $obj){
-
-  print_r(['obj',$obj]);
+$list = $dom->find('div.recommendationList div.container div.__homel div.__item');
+foreach ($list as $content) {
 
   /*
+  $html = $content->innerHtml;
+  echo $html."\n";
+  */
+
+  /*
+  $html = $content->find('div.__l a')->getAttribute('href');
+  echo $html."\n";
+  */
+
 
   $item  = new Item();
   $item
-  ->title($obj->nodeValue)
-  ->description($obj->textContent)
-  ->url('https://example.com/?p=1')
+  ->title($content->find('div.__l a')->getAttribute('title'))
+  ->description($content->find('div.__l a')->getAttribute('title'))
+  ->url($content->find('div.__l a')->getAttribute('href'))
+  ->enclosure($content->find('div.__l img')->getAttribute('src'))
 //  ->pubDate(strtotime('Fri, 20 Nov 2020 03:08:42 +0100'))
 //  ->content('<article><title>My first post</title><div id="content">Hello! I like sweets like Cupcake, Donut, Eclair, Froyo, Gingerbread, and so on...</div></atricle>')
   ->appendTo($channel);
-  */
+  
 }
 
 
-//echo $feed->render();
+echo $feed->render();

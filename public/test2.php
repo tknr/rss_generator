@@ -45,24 +45,18 @@ $channel
   ->ttl(60)
   ->appendTo($feed);
 
-/*
-  echo $feed->render();
-  exit();
-  */
-
 $list = $dom->find('div.recommendationList div.container div.__homel div.__item');
 foreach ($list as $content) {
 
-  /*
-  $html = $content->innerHtml;
-  echo $html."\n";
-  */
+  $element = $content->find('div.__r div.__time')->innerHtml;
+  $element2 = $content->find('div.__r div.__time i')->outerHtml;
+  $element3 = $content->find('div.__r div.__time div')->outerHtml;
+  $element = str_replace($element2." ",'',$element);
+  $element = str_replace($element3,'',$element);
+  $date = DateTime::createFromFormat('H:i m-d-Y',$element);
+  var_dump($date);
 
-  /*
-  $html = $content->find('div.__l a')->getAttribute('href');
-  echo $html."\n";
-  */
-
+  
 
   $item  = new Item();
   $item
@@ -70,7 +64,7 @@ foreach ($list as $content) {
   ->description($content->find('div.__l a')->getAttribute('title'))
   ->url($content->find('div.__l a')->getAttribute('href'))
   ->enclosure($content->find('div.__l img')->getAttribute('src'))
-//  ->pubDate(strtotime('Fri, 20 Nov 2020 03:08:42 +0100'))
+  ->pubDate($date->getTimestamp())
 //  ->content('<article><title>My first post</title><div id="content">Hello! I like sweets like Cupcake, Donut, Eclair, Froyo, Gingerbread, and so on...</div></atricle>')
   ->appendTo($channel);
   

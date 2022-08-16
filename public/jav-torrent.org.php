@@ -35,15 +35,10 @@ $list = $dom->find('div.content-main div.card div.container div.columns');
 foreach ($list as $content) {
 
   $image = $content->find('div.column img.image')->getAttribute('data-src');
-  echo $image."\n";
   $title = $content->find('div.is-5 div.card-content a')->innerHtml;
-  echo $title."\n";
   $url = $content->find('div.is-5 div.card-content a')->getAttribute('href');
-  echo $url."\n";
   $description = $content->find('div.is-5 div.card-content span.is-size-6')->innerHtml;
-  echo $description."\n";
   $contents = $content->find('div.is-5 div.card-content')->innerHtml;
-  echo $contents."\n";
 
   $item  = new Item();
   $item

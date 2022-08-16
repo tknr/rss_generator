@@ -29,8 +29,8 @@ $channel
   ->url($url)
   ->copyright('SHINCHOSHA')
   ->updateFrequency(1)
-  ->updatePeriod('hourly')
-  ->ttl(60)
+  ->updatePeriod('daily')
+  ->ttl(120)
   ->appendTo($feed);
 
 $list = $dom->find('div.read div.inner div.backnumber ul.cf li');

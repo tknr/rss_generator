@@ -27,8 +27,8 @@ $channel
   ->url($url)
   ->copyright($dom->find('div.copyrights > span.footer-logo')->innerHtml)
   ->updateFrequency(1)
-  ->updatePeriod('hourly')
-  ->ttl(60)
+  ->updatePeriod('daily')
+  ->ttl(120)
   ->appendTo($feed);
 
 $list = $dom->find('div.recommendationList div.container div.__homel div.__item');

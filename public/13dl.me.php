@@ -65,7 +65,7 @@ foreach ($list as $content) {
     ->title($content->find('div.__l a')->getAttribute('title'))
     ->description($content->find('div.__l a')->getAttribute('title'))
     ->url($content->find('div.__l a')->getAttribute('href'))
-    ->enclosure($content->find('div.__l img')->getAttribute('src'))
+    ->enclosure($content->find('div.__l img')->getAttribute('src'),0,'image/jpeg')
     ->pubDate($pubDate)
     //  ->content('<article><title>My first post</title><div id="content">Hello! I like sweets like Cupcake, Donut, Eclair, Froyo, Gingerbread, and so on...</div></atricle>')
     ->appendTo($channel);

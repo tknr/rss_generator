@@ -9,8 +9,6 @@ use Bhaktaraz\RSSGenerator\Item;
 use Bhaktaraz\RSSGenerator\Feed;
 use Bhaktaraz\RSSGenerator\Channel;
 
-// FIXME 2021年 PHP 8 でスクレイピングするなら php-html-parser - 猫でもわかるWebプログラミングと副業 https://www.utakata.work/entry/php/webscraping-with-php-html-parser
-
 header('Content-Type: text/xml');
 
 $options = new Options();
@@ -19,18 +17,6 @@ $options->setEnforceEncoding('utf8');
 $url = 'https://13dl.me/home/';
 $dom = new Dom();
 $dom->loadFromUrl($url, $options);
-/*
-$html = $dom->outerHtml;
-echo $html;
-exit();
-*/
-/*
-$element = $dom->find('div.copyrights > span.footer-logo')->innerHtml;
-echo $element;
-exit();
-*/
-
-
 
 $feed = new Feed();
 

@@ -1,5 +1,5 @@
 #!/bin/bash
-
+cd `dirname $0`
 export IFS=$'\n'
 
 for php in `find ./public -iname "*.php"`;do
